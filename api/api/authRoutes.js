@@ -4,6 +4,7 @@ import { db } from "../shared/db.js";
 import { createToken } from "./auth.js";
 
 const router = express.Router();
+
 router.post("/register", async (req, res) => {
   const { email, password } = req.body;
 
