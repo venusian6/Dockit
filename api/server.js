@@ -1,4 +1,5 @@
 import express from "express";
+import { authGuard } from "./api/authGuard.js";
 // import { db } from "./shared/db.js";
 // import { enqueueJob } from "./queue";
 // import { randomUUID } from "crypto";
@@ -13,6 +14,10 @@ app.get("/", (req, res) => {
     message: "Its working",
     uptime: process.uptime(),
   });
+});
+
+app.get("/me", authGuard, (req, res) => {
+  res.json({ user: req.user });
 });
 
 // app.post("/deploy", async (req, res) => {
