@@ -3,7 +3,7 @@ import { authGuard } from "./api/authGuard.js";
 // import { db } from "./shared/db.js";
 // import { enqueueJob } from "./queue";
 // import { randomUUID } from "crypto";
-
+import authRoute from "./api/authRoutes.js";
 const app = express();
 
 app.use(express.json());
@@ -15,6 +15,7 @@ app.get("/", (req, res) => {
     uptime: process.uptime(),
   });
 });
+app.use("/auth", authRoute);
 
 app.get("/me", authGuard, (req, res) => {
   res.json({ user: req.user });

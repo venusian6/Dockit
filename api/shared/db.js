@@ -1,9 +1,7 @@
-// import pkg, { Connection } from "pg";
+import pkg from "pg";
 
-// const { pool } = pg;
-// // pool  is connection manager
-// // we dont open or close the db manually pool handles it for us
+const { Pool } = pkg;
 
-// export const db = new Pool({
-//   connectionString: process.env.DATABASE_URL,
-// });
+export const db = new Pool({
+  connectionString: process.env.DATABASE_URL,
+});
