@@ -4,7 +4,7 @@ import { authGuard } from "./api/authGuard.js";
 import authRoute from "./api/authRoutes.js";
 const app = express();
 app.use(express.json());
-
+app.use("/auth", authRoute);
 app.get("/health", (req, res) => {
   res.json({ ok: true });
 });
