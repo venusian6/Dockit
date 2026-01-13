@@ -1,5 +1,5 @@
 import express from "express";
-import { db } from "./shared/db";
+import { db } from "./shared/db.js";
 // import { enqueueJob } from "./queue";
 // import { randomUUID } from "crypto";
 
