@@ -1,5 +1,5 @@
 import express from "express";
-import { authGuard } from "./api/authGuard.js";
+import { authGuard } from "./authGuard.js";
 import { db } from "../shared/db.js";
 import { enqueueJob } from "./queue.js";
 
