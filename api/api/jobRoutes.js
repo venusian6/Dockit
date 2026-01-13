@@ -3,7 +3,7 @@ import { authGuard } from "./authGuard.js";
 import { db } from "../shared/db.js";
 import { enqueueJob } from "./queue.js";
 
-const router = express.router();
+const router = express.Router();
 router.post("/", authGuard, async (req, res) => {
   const { server_id } = req.body;
   const userId = req.user.userId;
