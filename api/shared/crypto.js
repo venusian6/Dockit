@@ -1,15 +1,18 @@
 import crypto from "crypto";
 import dotenv from "dotenv";
-dotenv.config();
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// 👇 explicitly point to project root .env
+dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
 const algorithm = "aes-256-cbc";
-
 const secret = process.env.MASTER_KEY;
-
 //fixed length key
-
 const key = crypto.createHash("sha256").update(secret).digest();
-
 export function encrypt(text) {
   const iv = crypto.randomBytes(16);
 
