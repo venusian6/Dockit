@@ -7,7 +7,7 @@ import { markJobRunning, markJobSuccess, markJobFailed } from "./jobStatus.js";
 import { runSSHCommand } from "./ssh.js";
 import { buildDeployCommand } from "./deploy.js";
 import fs from "fs";
-
+dotenv.config();
 const workerId = os.hostname();
 
 function writeKeyFile(jobId, privateKey) {
