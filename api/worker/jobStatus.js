@@ -2,11 +2,11 @@ import { db } from "../shared/db.js";
 
 export async function markJobRunning(jobId) {
   await db.query(
-    `UPDATE jobs
-    
-    
+    `
+    UPDATE jobs
     SET status = 'running', started_at = NOW()
-    WHERE id=$1`,
+    WHERE id = $1
+    `,
     [jobId]
   );
 }
