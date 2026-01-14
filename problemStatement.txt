@@ -1,0 +1,43 @@
+Now worker need to know which server its key abd server ip
+We will have the user_id and server_id
+
+select job_id
+sever.host server.ssh_user key.encrypted_private_key
+
+From job
+join servers On jobserver = server_id
+join ssh_key ON encrypted_key = k.id
+where j.id = $1  let assume 101
+
+id      job_name       server_id
+101     Backup_job     10
+
+steps 
+
+where job.id =$1 (where $1=101)
+
+this limits us to one job now we want to know ehich server and which key it need to use
+
+so as we know that job has server_id 
+
+JOIN server s ON j.server_id=s.id
+
+id  host  ssh_user  ssh_key_id
+10  123.3  ubuntu    500
+20  "      ""           
+
+
+but we would take only first one which has the id 10
+
+jid   job_name   job_server__id  s.id s.host s.ssH-user  s.ssh_key_id
+101     BackupJob   10              10   123.1  ubuntu       500
+
+
+Now to find ssh key we need to join the second table
+
+id	encrypted_private_key
+500	ENCRYPTED_KEY_AAA
+600	ENCRYPTED_KEY_BBB
+700	ENCRYPTED_KEY_CCC
+
+JOIN ssh_key k on ssh_key_id = k.id
