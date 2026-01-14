@@ -1,4 +1,5 @@
-import "dotenv";
+import dotenv from "dotenv";
+
 import os from "os";
 import { getNextJob } from "./queue.js";
 import { loadJobDeployData } from "./loadJobDeploy.js";
