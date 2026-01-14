@@ -1,8 +1,6 @@
 import { db } from "../shared/db.js";
-
 export async function loadJobDeployData(jobId) {
-  const result = await db.query(
-    `
+  const sql = `
     SELECT
       j.id AS job_id,
       s.id AS server_id,
@@ -13,13 +11,10 @@ export async function loadJobDeployData(jobId) {
     JOIN servers s ON j.server_id = s.id
     JOIN ssh_keys k ON s.ssh_key_id = k.id
     WHERE j.id = $1
-    `,
-    [jobId]
-  );
-  console.log("🧪 SQL QUERY:\n", sql);
-  if (result.rows.length === 0) {
-    throw new Error("Invalid job");
-  }
+  `;
 
+  console.log("🧪 SQL QUERY:\n", sql);
+
+  const result = await db.query(sql, [jobId]);
   return result.rows[0];
 }
