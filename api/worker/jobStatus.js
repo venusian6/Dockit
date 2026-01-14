@@ -1,4 +1,4 @@
-import { db } from "../shared/db";
+import { db } from "../shared/db.js";
 
 export async function markJobRunning(jobId) {
   await db.query(

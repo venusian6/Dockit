@@ -1,11 +1,11 @@
 import "dotenv";
 import os from "os";
-import { getNextJob } from "./queue";
-import { loadJobDeployData } from "./loadJobDeploy";
-import { decrypt } from "../shared/crypto";
-import { markJobRunning, markJobSuccess, markJobFailed } from "./jobStatus";
-import { runSSHCommand } from "./ssh";
-import { buildDeployCommand } from "./deploy";
+import { getNextJob } from "./queue.js";
+import { loadJobDeployData } from "./loadJobDeploy.js";
+import { decrypt } from "../shared/crypto.js";
+import { markJobRunning, markJobSuccess, markJobFailed } from "./jobStatus.js";
+import { runSSHCommand } from "./ssh.js";
+import { buildDeployCommand } from "./deploy.js";
 import fs from "fs";
 
 const workerId = os.hostname();

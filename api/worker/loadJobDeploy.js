@@ -1,4 +1,4 @@
-import { db } from "../shared/db";
+import { db } from "../shared/db.js";
 
 export async function loadJobDeployData(jobId) {
   const result = await db.query(
