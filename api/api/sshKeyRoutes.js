@@ -8,7 +8,7 @@ const router = express.Router();
 router.post("/", authGuard, async (req, res) => {
   const { name, public_key, private_key } = req.body;
   const userId = req.user.userId;
-  if (!public_key || !private_key) {
+  if (!name || !public_key || !private_key) {
     return res.status(400).json({ error: "All fields required" });
   }
 
