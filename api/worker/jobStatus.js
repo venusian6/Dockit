@@ -21,8 +21,11 @@ export async function markJobSuccess(jobId) {
     [jobId]
   );
 }
-
 export async function markJobFailed(jobId, error) {
+  console.log("🧪 markJobFailed called");
+  console.log("jobId:", jobId);
+  console.log("error:", error);
+
   await db.query(
     `
     UPDATE jobs
