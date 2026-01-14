@@ -7,6 +7,7 @@ import { decrypt } from "../shared/crypto.js";
 import { markJobRunning, markJobSuccess, markJobFailed } from "./jobStatus.js";
 import { runSSHCommand } from "./ssh.js";
 import { buildDeployCommand } from "./deploy.js";
+import { addJobLog } from "./jobLogs.js";
 import fs from "fs";
 dotenv.config();
 const workerId = os.hostname();
@@ -41,6 +42,9 @@ async function processJob(jobId) {
       ssh_user: deployData.ssh_user,
       keyPath,
       command,
+      onLog: async (line) => {
+        await addJobLog(jobId, line.trim());
+      },
     });
 
     await markJobSuccess(jobId);

@@ -1,6 +1,6 @@
 import { exec } from "child_process";
 
-export function runSSHCommand({ host, ssh_user, keyPath, command }) {
+export function runSSHCommand({ host, ssh_user, keyPath, command, onLog }) {
   return new Promise((resolve, reject) => {
     const sshCmd =
       `ssh -i ${keyPath} ` +
@@ -8,13 +8,19 @@ export function runSSHCommand({ host, ssh_user, keyPath, command }) {
       `${ssh_user}@${host} ` +
       `"${command}"`;
 
-    console.log("🧪 SSH CMD:", sshCmd);
+    const child = exec(sshCmd);
 
-    exec(sshCmd, (error, stdout, stderr) => {
-      if (error) {
-        return reject(stderr || error.message);
-      }
-      resolve(stdout);
+    child.stdout.on("data", (data) => {
+      onLog?.(data.toString());
+    });
+
+    child.stderr.on("data", (data) => {
+      onLog?.(data.toString());
+    });
+
+    child.on("exit", (code) => {
+      if (code === 0) resolve();
+      else reject(new Error(`SSH exited with code ${code}`));
     });
   });
 }

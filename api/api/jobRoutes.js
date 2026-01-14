@@ -69,4 +69,21 @@ router.get("/", authGuard, async (req, res) => {
     res.status(500).json({ error: "Failed to fetch jobs" });
   }
 });
+
+router.get("/jobs/:id/logs", authGuard, async (req, res) => {
+  const { id } = req.params;
+
+  const result = await db.query(
+    `
+    SELECT message, created_at
+    FROM job_logs
+    WHERE job_id = $1
+    ORDER BY created_at ASC
+    `,
+    [id]
+  );
+
+  res.json(result.rows);
+});
+
 export default router;
