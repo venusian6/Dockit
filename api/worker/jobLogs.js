@@ -1,4 +1,4 @@
-import { db } from "../shared/db";
+import { db } from "../shared/db.js";
 
 export async function addJobLog(jobId, message) {
   await db.query(
