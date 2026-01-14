@@ -1,5 +1,6 @@
 import { useState } from "react";
 import SshKeys from "./SshKey";
+import Servers from "./Servers";
 
 export default function Dashboard() {
   const [page, setPage] = useState("ssh");
