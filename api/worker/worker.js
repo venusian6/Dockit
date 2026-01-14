@@ -1,31 +1,64 @@
-// import { write } from "fs";
-// import { loadJobDeployData } from "./db";
-// import { writeKeyFile } from "./keyfile";
-// import { decrypt } from "./crypto";
-// import { runSSHCommand } from "./ssh";
+import "dotenv";
+import os from "os";
+import { getNextJob } from "./queue";
+import { loadJobDeployData } from "./loadJobDeploy";
+import { decrypt } from "../shared/crypto";
+import { markJobRunning, markJobSuccess, markJobFailed } from "./jobStatus";
+import { runSSHCommand } from "./ssh";
+import { buildDeployCommand } from "./deploy";
+import fs from "fs";
 
-// async function run() {
-//   const jobId = "J1"; //suppose
+const workerId = os.hostname();
 
-//   const deployData = await loadJobDeployData(jobId);
+function writeKeyFile(jobId, privateKey) {
+  const path = `/tmp/key_${jobId}`;
+  fs.writeFileSync(path, privateKey, { mode: 0o600 });
+  return path;
+}
 
-//   console.log("Deploy Data:");
+function cleanupKeyFile(path) {
+  if (path) fs.unlinkSync(path);
+}
 
-//   const privateKey = decrypt(deployData.encrypted_private_key);
+async function processJob(jobId) {
+  let keyPath;
 
-//   const keyPath = writeKeyFile(jobId, privateKey);
+  try {
+    console.log("▶️ Running job:", jobId);
 
-//   const output = await runSSHCommand({
-//     host: deployData.host,
-//     ssh_user: deployData.ssh_user,
-//     keyPath,
-//     command: "whoami",
-//   });
+    await markJobRunning(jobId);
 
-//   console.log("SSH key written at:", keyPath);
-//   console.log("SSH output:", output);
+    const deployData = await loadJobDeployData(jobId);
 
-//   console.log(deployData);
-// }
+    const privateKey = decrypt(deployData.encrypted_private_key);
+    keyPath = writeKeyFile(jobId, privateKey);
 
-// run();
+    const command = buildDeployCommand();
+
+    await runSSHCommand({
+      host: deployData.host,
+      ssh_user: deployData.ssh_user,
+      keyPath,
+      command,
+    });
+
+    await markJobSuccess(jobId);
+    console.log("✅ Job success:", jobId);
+  } catch (err) {
+    await markJobFailed(jobId, err.toString());
+    console.error("❌ Job failed:", jobId, err);
+  } finally {
+    cleanupKeyFile(keyPath);
+  }
+}
+
+async function startWorker() {
+  console.log("🚀 Worker started");
+
+  while (true) {
+    const jobId = await getNextJob();
+    await processJob(jobId);
+  }
+}
+
+startWorker();
