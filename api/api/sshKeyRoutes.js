@@ -79,4 +79,12 @@ router.get("/", authGuard, async (req, res) => {
   }
 });
 
+router.get("/", authGuard, async (req, res) => {
+  const result = await db.query(
+    `SELECT id, host, ssh_user FROM servers WHERE user_id = $1`,
+    [req.user.userId]
+  );
+  res.json(result.rows);
+});
+
 export default router;
